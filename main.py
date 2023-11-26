@@ -80,7 +80,10 @@ if __name__ == '__main__':
                 block_type: convert_eq(block, rich_texts)
                 }
             
-            notion.blocks.update(block_id=block['id'], **update_values)
+            try:
+                notion.blocks.update(block_id=block['id'], **update_values)
+            except:
+                continue
         
     
     # Next, Convert Equations in the table blocks
@@ -97,7 +100,7 @@ if __name__ == '__main__':
                         plaintext_in_cell += '_'                
                     plaintext_in_cell += sublock_in_cell['plain_text']
     
-                cells_[cell_idx] = convert_inline_eq(plaintext_in_cell)
+                cells_[cell_idx] = convert_to_equation(plaintext_in_cell)
             
             update_value['table_row']['cells'] = cells_
             
