@@ -1,5 +1,5 @@
 
-def convert_inline_eq(plain_text): #For each richtext
+def convert_to_equation(plain_text): #For each richtext
     plain_text: str
     
     plain_text = plain_text.replace('<br>', '\n')
@@ -72,6 +72,12 @@ def convert_inline_eq(plain_text): #For each richtext
             eq_end = s[-1]
             
             _chunk_eq = plain_text[eq_start:eq_end]
+            print(_chunk_eq)
+            if 'frac' in _chunk_eq or \
+                ('^' in _chunk_eq and '_' in _chunk_eq) or \
+                'left' in _chunk_eq:
+                if 'aligned' not in _chunk_eq:
+                    _chunk_eq = '\\begin{aligned} ' + _chunk_eq + ' \\end{aligned}'
             
             _element = {
                 'annotations': {
@@ -146,6 +152,13 @@ def convert_eq(block, rich_texts): #or texts
         #     exp_matheq = exp_matheq[2:]
         # if exp_matheq.endswith('\n'):
             # exp_matheq = exp_matheq[:-1]
+        
+        exp_matheq.replace('\\begin{align*}', '')
+        exp_matheq.replace('\\end{align*}', '')
+        exp_matheq.replace('\\begin{align}', '')
+        exp_matheq.replace('\\end{align}', '')        
+        if '{aligned}' not in exp_matheq:
+            exp_matheq = '\\begin{aligned} ' + exp_matheq + ' \\end{aligned}'
 
         _element = {
             'annotations': {
@@ -180,7 +193,7 @@ def convert_eq(block, rich_texts): #or texts
             _plain_text = _rich_text['plain_text']
             text_inlineeq += _plain_text
         
-        _rich_texts = convert_inline_eq(text_inlineeq)
+        _rich_texts = convert_to_equation(text_inlineeq)
 
         update_value = {'rich_text': _rich_texts}
 
