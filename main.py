@@ -1,6 +1,6 @@
 import os
 from notion_client import Client
-from functions import convert_eq, convert_inline_eq
+from functions import convert_eq, convert_to_equation
 
 if __name__ == '__main__':
     
